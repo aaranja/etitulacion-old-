@@ -1,0 +1,9 @@
+*.pyc
+*~
+__pycache__
+myvenv
+db.mysql
+/sr/static
+/sr/documents
+/sr/media
+.DS_Store

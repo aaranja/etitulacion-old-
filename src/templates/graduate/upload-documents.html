@@ -1,0 +1,228 @@
+{% extends 'graduate-base.html' %}
+{% load crispy_forms_tags %}
+{% block head %}
+{% load static %}
+    <script src="{% static 'js/multi-carrete.js' %}"></script>
+    <script src="{% static 'js/upload-documents.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/multi-carrete.css' %}">
+    <style>
+            @import url('https://fonts.googleapis.com/css?family=Sulphur+Point&display=swap');
+            *{
+                padding:0;
+                box-sizing: border-box;
+                list-style: none;
+                text-decoration: none;
+                font-family: 'Sulphur Point', sans-serif;
+                align-items: flex-start;
+            }
+            /**style sidebar**/
+            .sidebar{
+                padding-top: 4rem;
+                height: calc(100vh - 48px);
+                position: fixed;
+                top: 0;
+                flex-basis: 15rem;
+                flex-grow: 1;
+                border-right: 4px solid rgba(18, 32, 146,0.09);
+                /*position: fixed;
+                width: 200px;
+                height: 100%;
+                background: rgb(240, 240, 240);
+                padding: 30px 0;
+                border-right: 2px solid rgba(18, 32, 146,0.09);*/
+            }
+            @supports ((position: -webkit-sticky) or (position: sticky)) {
+            .sidebar{
+                position: -webkit-sticky;
+                position: sticky;
+              }
+            }
+            .sidebar h2{
+                /*text-transform: uppercase;*/
+                text-align: center;
+                margin-bottom: 30px;
+            }
+            .sidebar ul li{
+                padding-top: 5vh;
+                padding: 15px;
+                border-bottom: 1px solid rgba(0,0,0,0.05);
+                border-top: : 1px solid rgba(60, 179, 113,0.05);
+            }
+            .sidebar ul li span{
+                width: 25px;
+            }
+            .sidebar p{
+                font-size: x-large;
+            }
+            .sidebar ul li:hover{
+                background: rgba(18, 32, 146,0.2);
+                cursor:pointer; cursor: hand;
+            }
+            .MultiCarousel{
+                margin-top: 4rem;
+            }
+
+            div.pad15{
+                width: 50vh;
+                height: 60vh;
+                background-color: white;
+                padding-bottom: 50vh;
+            }
+            iframe.vista{
+                height: 55vh;
+                width: 45vh; 
+                background-color: #f4f4f4;
+                background-image: url({% static 'icons/upload_file.png' %});
+                background-size: 23% 19%;
+                background-repeat:no-repeat;
+                background-position: center center;
+                border: 2px dashed #999;
+            }
+            .boton{
+                position: absolute;
+                right: 1rem;
+                bottom: 1vh;
+                width: 8rem;
+            }
+            h5, h4{
+                text-align: center;
+            }
+            p, span{
+            
+               font-weight: normal;
+            }
+            ul.list-group{
+                padding-top: 3vh;
+            }
+            
+            input.delet-box:checked{
+               display: none;
+            }
+           
+            
+            input.delet-box {
+                display: none;
+                position: flex;
+                
+                cursor: hand;
+                z-index: 1;
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+            
+            input.delet-box  ~ .del-label::after {
+                margin-left: .5rem;
+                content: '\2715';
+                vertical-align: baseline;
+                
+                font-weight: bold;
+                position: static;
+                left: 5px;
+                top: 2px;
+                color: #DC4A38;
+                cursor: hand;
+            }
+            input.delet-box:checked ~ .del-label::after {
+                display: none;
+            }
+            .del-label{
+                float: right;   
+            }
+            .list{
+                padding-top: 3vh;
+            }
+            .del-group{
+                display: none;
+            }
+            
+        </style>
+{% endblock %}
+{% block content %}
+<form action="{% url 'uploadGraduateDocs' %}" method="post" enctype="multipart/form-data"> {% csrf_token%}
+    <div class="container">
+        <div class="row">
+        <div class="sidebar col-12 col-sm-4">
+            
+                <h4>Documentos requeridos</h4>
+                <ul class="list">
+                    <li class="li-doc">
+                        <span >Acta de nacimiento</span>
+                        <label class='del-group' id='actaB' >
+                            {{ form.borrar_acta }}
+                        <label class='del-label' for='actaD' id='actaL'>{{ form.borrar_acta.label }}</label>
+                        </label>
+                    </li>
+                    <li>
+                        <span>C.U.R.P.</span>
+                        <label class='del-group' id='curpB' >
+                            {{ form.borrar_curp }}
+                        <label class='del-label' for='curpD' id='curpL'>{{ form.borrar_curp.label }}</label>
+                        </label>
+                    </li>
+                    <li>
+                        <span>Certificado de inglés</span>
+                        <label class='del-group' id='cdiB' >
+                            {{ form.borrar_cdi }}
+                        <label class='del-label' for='cdiD' id='cdiL'>{{ form.borrar_cdi.label }}</label>
+                        </label>
+                    </li>
+                    <li>
+                        <span>Certificado de bachillerato</span>
+                        <label class='del-group' id='cdbB' >
+                            {{ form.borrar_cdb }}
+                        <label class='del-label' for='cdbD' id='cdbL'>{{ form.borrar_cdb.label }}</label>
+                        </label>
+                    </li>
+                </ul>
+                <button name="submit" type="submit" value="Submit" class="boton btn btn-success mybtn tx-tfm" > Guardar </button>
+        
+        </div>
+        <div class="col-12 col-sm-8 mx-auto">
+            <div class="MultiCarousel" data-items="1,1,1,1" data-slide="1" id="MultiCarousel"  data-interval="1000"  style="background-color: white; padding-bottom: 10vh ">
+                <div class="text-center"> <h4>Subir documentación</h4></div>
+                    <div class="MultiCarousel-inner" style="height: 70vh; ">
+                         
+                            <div class="item mx-auto">
+                                <div class="pad15 mx-auto" style="background-color: white;">
+                                    <iframe id="actaF" class="vista" src="" frameborder="0"></iframe>
+                                    <div class="custom-file mx-auto" >
+                                        {{ form.acta_de_nacimiento| as_crispy_field}}
+                                    </div>
+                                    <p style="padding-top: 2vh; height:2">No mayor a un año de expedición</p>
+                                </div>
+                            </div>
+                            <div class="item mx-auto">
+                                <div class="pad15 mx-auto" style="background-color: white;">
+                                    <iframe class="vista mx-auto" id="curpF" src=""> </iframe>
+                                    <div class="custom-file mx-auto">
+                                        {{ form.cURP| as_crispy_field}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="item mx-auto">
+                                <div class="pad15 mx-auto" style="background-color: white;">
+                                    <iframe class="vista mx-auto" id="cdiF" src=""> </iframe>
+                                    <div class="custom-file mx-auto">
+                                        {{ form.certificado_de_ingles| as_crispy_field}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="item mx-auto">
+                                <div class="pad15 mx-auto" style="background-color: white;">
+                                    <iframe class="vista mx-auto" id="cdbF" src=""> </iframe>
+                                    <div class="custom-file mx-auto">
+                                        {{ form.certitificado_de_bachiller| as_crispy_field}}
+                                    </div>
+                                </div>
+                            </div>
+                        
+                </div>
+                    <button type="button" class="btn btn-primary leftLst"><</button>
+                    <button type="button" class="btn btn-primary rightLst">></button>
+            </div>
+        </div>
+    </div>
+    </div>
+</form>
+
+{% endblock %}

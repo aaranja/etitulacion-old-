@@ -1,0 +1,374 @@
+{% extends 'admin-base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block head %} 
+
+<script type="text/javascript">
+
+	$(document).ready(function(){
+	const cm = document.querySelector('.custom-cm');
+	var idFila="";
+	//metodo que oculta o muestra el context-menu
+	function showContextMenu(show = true) {
+		cm.style.display=show ? 'inline-block': 'none'; 
+	}		
+	//click derecho sobre una fila que despliega el context-menu
+	window.addEventListener('contextmenu',(e)=>{
+		console.log(e.toElement);
+		e.preventDefault();
+		console.log(e);
+		var clase = e.path[1].className;
+		//clase = clase.substr(0,10);
+		//idFila = e.path[1].id;
+		//idFila=e.target.parentElement.id; //guardamos valor de fila seleccionada
+		
+		if(clase=="column" || clase=="selectable" || clase=="card"){ //"row-custom" es el nombre de la clase de cada fila
+			showContextMenu(true);
+			cm.style.top=e.y+cm.offsetHeight > window.innerHeight ? window.innerHeight - cm.offsetHeight +'px' : e.y+'px';
+			cm.style.left=e.x+cm.offsetWidth > window.innerWidth ? window.innerWidth - cm.offsetWidth +'px' : e.x+'px';
+		}
+	});
+	//click sobre la opcion del context-menu
+	window.addEventListener('click',(e)=>{
+		if(e.srcElement.className!='custom-cm_item'){ //"custom-cm_item" es el nombre de la clase de cada opcion del context-menu
+			showContextMenu(false);
+		}else{
+			//ejecutar acciones segun la opcion
+			switch(e.target.innerText){
+				case 'Uno':
+				break;
+				case 'Dos':
+				break;
+				case 'Generar carta de no inconvenientes':
+				showContextMenu(false);
+				//window.location=idFila+"/carta-no-inconveniencia/";
+				break;
+				case 'Validar documentación':
+				showContextMenu(false);
+				//window.location="validar-documentos/"+idFila+'/';
+				break;
+			}
+		}
+	});
+	//cerrar context-menu con tecla ESC
+	window.addEventListener('keydown',(e)=>{
+		if(e.keyCode==27)
+			showContextMenu(false);
+	});
+});
+</script>
+ <link rel="stylesheet" type="text/css" href="{% static 'css/colorbox.css'%}">
+ <script type="text/javascript" src="{% static 'js/jquery.colorbox.js'%}"></script>
+
+<script type="text/javascript">
+			
+      $(document).ready(function ($) {
+      	$(".iframe").colorbox({iframe:true, width:"80%", height:"80%"});
+      });
+		</script>
+
+<style type="text/css">
+	    	@import url('https://fonts.googleapis.com/css?family=Sulphur+Point&display=swap');
+			.sidebar{
+				margin:0;
+				padding:0;
+				box-sizing: border-box;
+				list-style: none;
+				text-decoration: none;
+				font-family: 'Sulphur Point', sans-serif;
+
+				align-items: flex-start;
+			}
+			body{
+			  background-color: rgb(255,255,255);
+			}
+
+			.wrapper{
+				display: flex;
+				position: relative;
+			}
+
+			/**style sidebar**/
+			.sidebar{
+				flex-basis: 20rem;
+				flex-grow: 1;
+				border-right: 4px solid rgba(18, 32, 146,0.09);
+				width: 30%
+				/*position: fixed;
+				width: 200px;
+				height: 100%;
+				background: rgb(240, 240, 240);
+				padding: 30px 0;
+				border-right: 2px solid rgba(18, 32, 146,0.09);*/
+			}
+			.sidebar h2{
+				/*text-transform: uppercase;*/
+				text-align: center;
+				margin-bottom: 30px;
+			}
+			.sidebar ul li{
+				padding: 15px;
+				border-bottom: 1px solid rgba(0,0,0,0.05);
+				border-top: : 1px solid rgba(60, 179, 113,0.05);
+			}
+			.sidebar ul li a{
+				width: 25px;
+			}
+			.sidebar p{
+				font-size: x-large;
+			}
+			.sidebar ul li:hover{
+				background: rgba(18, 32, 146,0.2);
+				cursor:pointer; cursor: hand;
+			}
+			.listcontent{
+				flex-basis: 0;
+  				flex-grow: 999;
+  				min-width: 60%;
+			}
+			.container{
+				display: flex;
+				position: static;
+				flex-wrap: wrap;
+			}
+			.checkbox-group {
+    			position: flex;
+    			cursor: hand;
+			}
+			.custom-checkbox-label:hover{
+				cursor: hand;
+			}
+			input {
+				display: none;
+				position: flex;
+				opacity: 0;
+    			cursor: hand;
+    			z-index: 1;
+    			width: 1.5rem;
+    			height: 1.5rem;
+			}
+			.custom-checkbox-span{
+				float: right;
+			}
+			input  ~ .custom-checkbox-span::after {
+				content: "\2715";
+				vertical-align: bottom;
+				font-size: 1.5rem;
+			    font-weight: bold;
+			    position: static;
+			    left: 5px;
+			    top: 2px;
+			    color: #DC4A38;
+			    cursor: hand;
+			}
+			input:checked ~ .custom-checkbox-span::after {
+			    content: "\2713";
+			    text-align: center bottom;
+			    vertical-align: bottom;
+			    font-size: 1.5rem;
+			    font-weight: bold;
+			    position: static;
+			    left: 5px;
+			    top: 0px;
+			    color: #6ECA87;
+				    padding-bottom: 6px;
+			}
+			.btn-success{
+				display: flex;
+				float: right;
+				margin-top: 1vh;
+				margin-right: 2vh;
+				margin-bottom: 2vh;
+			}
+
+			/* Remove extra left and right margins, due to padding */
+			.row {margin: 0 -5px;}
+
+			/* Clear floats after the columns */
+			.row:after {
+			  content: "";
+			  display: table;
+			  clear: both;
+			}
+
+			.column {
+				height: 12rem;
+			    width: 100%;
+			    display: flex;
+			    
+			    justify-content: center;
+			    text-align: center;
+			  }
+
+			/* Style the counter cards */
+			.card {
+			  display: flex;
+			  height: 9rem;
+			  width: 7rem;
+			  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+			  margin-top: 12px;
+			  text-align: center;
+			  background-color: #f1f1f1;
+			  margin-left:auto;
+			  margin-right:auto;
+			  margin-bottom: 10px;
+			}
+
+			.grid {
+				display: grid;
+			}
+			span {
+				
+				height: 2rem;
+			}
+
+			.column:hover{
+				background-color: #ECECEC;
+				cursor:pointer; cursor: hand;
+			}
+
+			@media screen and (min-width: 576px) {
+			    .grid {
+				 	display: grid;
+				 	grid-template-columns: 1fr 1fr 1fr ;
+		  		 	grid-template-rows: 1.2fr 1fr;
+				}
+			}
+
+			@media screen and (min-width: 768px) {
+			    .grid {
+			    	display: grid;
+				 	grid-template-columns: 1fr 1fr 1fr 1fr;
+		  		 	grid-template-rows: 1.2fr 1fr;
+				}
+			}
+
+			@media screen and (min-width: 900px) {
+	    		.grid {
+	    			display: grid;
+	    			grid-template-columns: 1fr 1fr  1fr  1fr 1fr;
+	    			grid-template-rows: 1.3fr 1fr;
+	    		}
+			}
+			.menudiv{
+				position: static;
+			}
+			.custom-cm{
+				background-color: white;
+			    border: 1px solid #cccccc;
+			    box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
+			    padding: 10px 0;
+			    position: absolute;
+			    width: 200px;
+			    top: 0;
+			    left: 0;
+			    display: none;
+			}
+
+			.custom-cm_item{
+				cursor: pointer;
+			    padding: 8px 15px;
+			}
+			.custom-cm_item:hover{
+				background-color: #f8f8f8;
+			}
+			.custom-cm_div{
+				border-bottom: 1px solid #eeeeee;
+			    margin: 10px 0;	
+			}
+
+
+	    </style>
+{% endblock %}
+
+{% block content %} 
+<div class="container" style="padding-top: 10vh;">
+	<div class="sidebar">
+		
+	    	<h2>Validar documentación</h2>
+	    	<p>Información</p>
+		    <ul>
+		      <li>{{ graduate.enrollment }}</li>
+		      <li>{{ graduate.first_name }} {{ graduate.last_name }}</li>
+		      <li>{{ graduate.career }}</li>
+		      <li>{{ graduate.gender }}</li>
+		    </ul>
+		    <div class="form-group" style="margin-right: 1rem;">
+		      <p>Comentarios</p>
+		      <textarea class="form-control" rows="10" style=""></textarea>
+		      <button class="btn-success btn" style="margin-right: 0px; width: 5rem">Guardar</button>
+		    </div>
+		   
+		</div>
+		<div class="listcontent" >
+		 <p style="font-size: x-large; padding: 15px;">Documentos</p>
+		 <div class="grid"  style="padding: 10px">
+		 	
+		 	<div class="column iframe"  href="https://wikipedia.com">
+		    	<div class="selectable">
+					<div class="card" style="margin-left:auto;margin-right:auto;">
+				      <h4>Preview</h4>
+				    </div>
+		    		<span>Acta de nacimiento</span>
+		    	</div>
+		    </div>
+		  
+		    <div class="column iframe"  href="https://hipertextual.com">
+		    	<div class="selectable">
+					<div class="card" style="margin-left:auto;margin-right:auto;">
+				      <h4>Preview</h4>
+				    </div>
+		    		<span>Cert. de licenciatura</span>
+		    	</div>
+		    </div>
+
+		    <div class="column" >
+		    	<div class="selectable">
+					<div class="card" style="margin-left:auto;margin-right:auto;">
+				      <h4>Preview</h4>
+				    </div>
+		    		<span>Cert. de bachiller</span>
+		    	</div>
+		    </div>
+
+		  
+		    <div class="column" >
+		    	<div class="selectable">
+					<div class="card" style="margin-left:auto;margin-right:auto;">
+				      <h4>Preview</h4>
+				    </div>
+		    		<span >Const. S.Social</span>
+		    	</div>
+		    </div>
+		    <div class="column" >
+		    	<div class="selectable">
+					<div class="card" style="margin-left:auto;margin-right:auto;">
+				      <h4>Preview</h4>
+				    </div>
+		    		<span >C.U.R.P.</span>
+		    	</div>
+		    </div>
+		    <div class="column" >
+		    	<div class="selectable">
+					<div class="card" style="margin-left:auto;margin-right:auto;">
+				      <h4>Preview</h4>
+				    </div>
+		    		<span >Acta de nacimiento</span>
+		    	</div>
+		    </div>
+		  
+		 </div>	
+		  
+		</div>
+		<div class="menudiv">
+  		<div class="custom-cm">
+			<div class="custom-cm_item">Ver documento</div>
+			<div class="custom-cm_item">Descargar</div>
+			<div class="custom-cm_item">Abrir en una nueva pestaña</div>
+
+			
+		</div>
+	</div>
+</div>
+{% endblock %}
+

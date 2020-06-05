@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<style type="text/css">
+		
+
+		.grid {
+			display: grid;
+		}
+		@media screen and (min-width: 576px) {
+		    .grid {
+			 	display: grid;
+			 	grid-template-columns: 1fr 1fr ;
+	  		 	grid-template-rows: 1fr 1fr;
+			}
+		}
+
+		@media screen and (min-width: 768px) {
+		    .grid {
+		    	display: grid;
+			 	grid-template-columns: 1fr 1fr 1fr;
+	  		 	grid-template-rows: 1fr 1fr;
+			}
+		}
+
+		@media screen and (min-width: 900px) {
+    		.grid {
+    			display: grid;
+    			grid-template-columns: 1fr 1fr  1fr  1fr;
+    			grid-template-rows: 1fr 1fr;
+    		}
+		}
+
+		.card {
+			  
+			  height: 10rem;
+			  width: 100%;
+			  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+			  padding: 0px;
+			  text-align: center;
+			  background-color: #f1f1f1;
+			}
+		.listcontent{
+				flex-basis: 0;
+  				flex-grow: 999;
+  				min-width: 60%;
+			}
+	</style>
+
+
+
+</head>
+<body>
+	<div class="container listcontent mx-auto">
+		
+	
+	<div class="grid container" >
+		 	
+		   <div class="card" style="background-color: red" > <span>a</span></div>
+		    <div class="card" style="background-color: green" > <span>a</span></div>
+		     <div class="card" style="background-color: yellow" > <span>a</span></div>
+		      <div class="card" style="background-color: gray" > <span>a</span></div>
+		 </div>		
+
+	</div>
+
+</body>
+</html>
